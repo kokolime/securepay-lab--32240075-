@@ -27,6 +27,22 @@ jobs:
       - run: npm test
 
   # >>> TAHAP A: tambahkan job secret-scan di bawah ini
+
+  # --- JOB BARU: Security Scan ---
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Run Vulnerability / Code Scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          ignore-unfixed: true
+          format: 'table'
+          exit-code: '1' # Menyebabkan job GAGAL (merah) jika ditemukan kerentanan HIGH/CRITICAL
+          severity: 'CRITICAL,HIGH'
   # >>> TAHAP B: tambahkan job dependency-scan
   # >>> TAHAP C: tambahkan job sast
   # >>> TAHAP D: tambahkan job deploy (security gate)
